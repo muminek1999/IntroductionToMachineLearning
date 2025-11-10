@@ -61,6 +61,18 @@ def get_shape_features(image: np.ndarray) -> np.ndarray:
 
     return log_hu_moments.flatten()
 
+# Funkcja do normalizacji - euclidian normalization
+
+def normalize_features(feature_vector: np.ndarray) -> np.ndarray:
+  
+    norm = np.linalg.norm(feature_vector)
+    
+    if norm == 0:
+        return feature_vector 
+        
+    return feature_vector / norm
+
+
 def extract_features(processed_image: np.ndarray) -> np.ndarray:
     try:
         if processed_image is None:
@@ -78,7 +90,9 @@ def extract_features(processed_image: np.ndarray) -> np.ndarray:
             shape_features
         ])
 
-        return final_feature_vector
+        normalized_vector = normalize_features(final_feature_vector)
+
+        return normalized_vector
 
     except Exception as e:
         print(f"ERROR: An unexpected error occurred during feature extraction: {e}")
